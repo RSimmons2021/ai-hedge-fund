@@ -10,6 +10,7 @@ from agents.sentiment import sentiment_agent
 from agents.stanley_druckenmiller import stanley_druckenmiller_agent
 from agents.technicals import technical_analyst_agent
 from agents.valuation import valuation_agent
+from agents.jim_simons import jim_simons_agent
 from agents.warren_buffett import warren_buffett_agent
 
 # Define analyst configuration - single source of truth
@@ -49,26 +50,32 @@ ANALYST_CONFIG = {
         "agent_func": warren_buffett_agent,
         "order": 6,
     },
+    "jim_simons": {
+        "display_name": "Jim Simons",
+        "agent_func": jim_simons_agent,
+        "order": 7,
+    },
     "technical_analyst": {
         "display_name": "Technical Analyst",
         "agent_func": technical_analyst_agent,
-        "order": 7,
+        "order": 8,
     },
     "fundamentals_analyst": {
         "display_name": "Fundamentals Analyst",
         "agent_func": fundamentals_agent,
-        "order": 8,
+        "order": 9,
     },
     "sentiment_analyst": {
         "display_name": "Sentiment Analyst",
         "agent_func": sentiment_agent,
-        "order": 9,
+        "order": 10,
     },
     "valuation_analyst": {
         "display_name": "Valuation Analyst",
         "agent_func": valuation_agent,
-        "order": 10,
+        "order": 11,
     },
+    
 }
 
 # Derive ANALYST_ORDER from ANALYST_CONFIG for backwards compatibility
