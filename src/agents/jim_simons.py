@@ -31,6 +31,15 @@ class JimSimonsSignal(BaseModel):
     regime_classification: Optional[str] = None
 
 
+class SimonsOutput(BaseModel):
+    signal: Literal["bullish", "bearish", "neutral"]
+    confidence: float
+    reasoning: str
+    alpha_factors: Dict[str, float] = Field(default_factory=dict)
+    statistical_metrics: Dict[str, float] = Field(default_factory=dict)
+    regime_classification: Optional[str] = None
+
+
 # Renaissance-inspired factor types
 class FactorType:
     VALUE = "value"
@@ -654,79 +663,99 @@ def detect_trading_signals(df: pd.DataFrame, market_regime: str) -> dict:
     return analysis
 
 
-def detect_market_anomalies(ticker: str, df: pd.DataFrame, cross_sectional_data: dict) -> dict:
+def detect_market_anomalies(ticker: str, df: pd.DataFrame, cross_sectional_data: Dict[str, Dict]) -> Dict:
     """
-    Detects market anomalies based on the historical data and cross-sectional data.
+    Detects market anomalies and inefficiencies.
     
-    Implements Renaissance-inspired market anomaly detection including:
+    Implements Renaissance-inspired anomaly detection including:
     - Earnings surprises
     - Revenue surprises
-    - Price momentum
+    - Price momentum anomalies
+    - Cross-sectional anomalies
     """
-    analysis = {}
-    
     if df is None or len(df) < 20:
-        return {"error": "Insufficient data for market anomalies"}
+        return {"error": "Insufficient data for anomaly detection"}
+        
+    anomalies = {}
+    alpha_factors = {}
+    metrics = {}
     
     # 1. Earnings surprise anomaly
     try:
-        # Check if we have earnings data
-        eps_data = None
-        for item in financial_line_items:
-            if hasattr(item, 'earnings_per_share') and item.earnings_per_share is not None:
-                eps_data = item.earnings_per_share
-                break
-        
-        if eps_data is not None and len(financial_line_items) >= 2:
-            # Calculate earnings surprise
-            earnings_surprise = financial_line_items[0].earnings_per_share - financial_line_items[1].earnings_per_share
-            analysis["earnings_surprise_anomaly"] = earnings_surprise > 0
+        # Check if we have financial_line_items in the scope
+        if 'financial_line_items' in locals() or 'financial_line_items' in globals():
+            earnings_data = [item for item in financial_line_items if item.line_item_name == "earnings_per_share"]
+            if len(earnings_data) >= 2:
+                current_eps = earnings_data[0].value
+                previous_eps = earnings_data[1].value
+                earnings_surprise = (current_eps - previous_eps) / abs(previous_eps) if previous_eps != 0 else 0
+                
+                # Significant earnings surprise
+                if abs(earnings_surprise) > 0.1:  # 10% surprise
+                    anomalies["earnings_surprise"] = earnings_surprise
+                    alpha_factors["earnings_surprise_anomaly"] = 1 if earnings_surprise > 0 else -1
+                else:
+                    alpha_factors["earnings_surprise_anomaly"] = 0
+            else:
+                alpha_factors["earnings_surprise_anomaly"] = 0
         else:
-            analysis["earnings_surprise_anomaly"] = False
+            alpha_factors["earnings_surprise_anomaly"] = 0
     except Exception as e:
         print(f"Earnings surprise anomaly detection failed: {e}")
-        analysis["earnings_surprise_anomaly"] = False
+        alpha_factors["earnings_surprise_anomaly"] = 0
     
     # 2. Revenue surprise anomaly
     try:
-        # Check if we have revenue data
-        revenue_data = None
-        for item in financial_line_items:
-            if hasattr(item, 'revenue') and item.revenue is not None:
-                revenue_data = item.revenue
-                break
-        
-        if revenue_data is not None and len(financial_line_items) >= 2:
-            # Calculate revenue surprise
-            revenue_surprise = financial_line_items[0].revenue - financial_line_items[1].revenue
-            analysis["revenue_surprise_anomaly"] = revenue_surprise > 0
+        # Check if we have financial_line_items in the scope
+        if 'financial_line_items' in locals() or 'financial_line_items' in globals():
+            revenue_data = [item for item in financial_line_items if item.line_item_name == "revenue"]
+            if len(revenue_data) >= 2:
+                current_revenue = revenue_data[0].value
+                previous_revenue = revenue_data[1].value
+                revenue_surprise = (current_revenue - previous_revenue) / abs(previous_revenue) if previous_revenue != 0 else 0
+                
+                # Significant revenue surprise
+                if abs(revenue_surprise) > 0.1:  # 10% surprise
+                    anomalies["revenue_surprise"] = revenue_surprise
+                    alpha_factors["revenue_surprise_anomaly"] = 1 if revenue_surprise > 0 else -1
+                else:
+                    alpha_factors["revenue_surprise_anomaly"] = 0
+            else:
+                alpha_factors["revenue_surprise_anomaly"] = 0
         else:
-            analysis["revenue_surprise_anomaly"] = False
+            alpha_factors["revenue_surprise_anomaly"] = 0
     except Exception as e:
         print(f"Revenue surprise anomaly detection failed: {e}")
-        analysis["revenue_surprise_anomaly"] = False
+        alpha_factors["revenue_surprise_anomaly"] = 0
     
     # 3. Price momentum anomaly
     try:
-        # Calculate price momentum
-        price_momentum = df['close'].pct_change().mean()
-        analysis["price_momentum_anomaly"] = price_momentum > 0
+        # Calculate 1-month momentum
+        momentum_period = min(20, len(df) - 1)  # Approximately 1 month of trading days
+        price_momentum = df['close'].pct_change(momentum_period).iloc[-1]
+        metrics["price_momentum"] = float(price_momentum)  # Convert numpy types to Python native types
+        
+        # Significant price momentum
+        if abs(price_momentum) > 0.05:  # 5% momentum
+            anomalies["price_momentum"] = price_momentum
+            alpha_factors["price_momentum_anomaly"] = 1 if price_momentum > 0 else -1
+        else:
+            alpha_factors["price_momentum_anomaly"] = 0
     except Exception as e:
         print(f"Price momentum anomaly detection failed: {e}")
-        analysis["price_momentum_anomaly"] = False
+        alpha_factors["price_momentum_anomaly"] = 0
     
-    # Add alpha factors and metrics
-    analysis["alpha_factors"] = {
-        "earnings_surprise_anomaly": 1 if analysis.get("earnings_surprise_anomaly", False) else 0,
-        "revenue_surprise_anomaly": 1 if analysis.get("revenue_surprise_anomaly", False) else 0,
-        "price_momentum_anomaly": 1 if analysis.get("price_momentum_anomaly", False) else 0
+    # 4. Cross-sectional anomalies (if available)
+    if ticker in cross_sectional_data and "potential_pairs" in cross_sectional_data[ticker]:
+        potential_pairs = cross_sectional_data[ticker]["potential_pairs"]
+        if potential_pairs:
+            anomalies["statistical_arbitrage_pairs"] = potential_pairs
+    
+    return {
+        "anomalies": anomalies,
+        "alpha_factors": alpha_factors,
+        "metrics": metrics
     }
-    
-    analysis["metrics"] = {
-        "price_momentum": price_momentum if 'price_momentum' in locals() else 0
-    }
-    
-    return analysis
 
 
 def aggregate_analysis_score(
@@ -814,75 +843,55 @@ def calculate_confidence(statistical_metrics: dict, total_score: float, signal: 
 
 def generate_simons_output(
     ticker: str,
-    analysis_data: dict,
+    analysis_data: Dict,
     model_name: str,
     model_provider: str,
     market_regime: str
-) -> JimSimonsSignal:
+) -> SimonsOutput:
     """
-    Generates a Jim Simons-style investment decision.
+    Generates Renaissance-style analysis output for a ticker.
+    """
+    ticker_data = analysis_data.get(ticker, {})
     
-    Implements Renaissance-inspired investment decision including:
-    - Quantitative, data-driven approach
-    - Short-term trading
-    - Mathematical models
-    - Statistical analysis
-    - Algorithmic trading
-    """
-    template = ChatPromptTemplate.from_messages([
-        (
-            "system",
-            """You are a Jim Simons AI agent, making investment decisions using his principles:
-            - Quantitative, data-driven approach
-            - Short-term trading
-            - Mathematical models
-            - Statistical analysis
-            - Algorithmic trading
-
-            Return a rational recommendation: bullish, bearish, or neutral, with a confidence level (0-100) and thorough reasoning,
-            based on volatility, momentum, and other quantitative factors. For example, if bullish: "The stock exhibits low volatility and positive momentum, indicating a potential upward trend."
-            If bearish: "The stock shows high volatility and negative momentum, suggesting a potential downward trend."
-            """
-        ),
-        (
-            "human",
-            """Based on the following analysis of quantitative factors, create a Simons-style investment signal:
-
-            Analysis Data for {ticker}:
-            {analysis_data}
-
-            Return JSON exactly in this format:
-            {{
-              "signal": "bullish" or "bearish" or "neutral",
-              "confidence": float (0-100),
-              "reasoning": "string"
-            }}
-            """
-        )
-    ])
-
-    prompt = template.invoke({
-        "analysis_data": json.dumps(analysis_data, indent=2),
-        "ticker": ticker
-    })
-
-    def create_default_jim_simons_signal():
-        return JimSimonsSignal(
-            signal="neutral", 
-            confidence=0.0, 
-            reasoning="Error in generating Renaissance Technologies analysis; defaulting to neutral.",
-            alpha_factors={},
-            statistical_metrics={},
-            regime_classification=MarketRegime.SIDEWAYS
-        )
-
-    return call_llm(
-        prompt=prompt,
-        model_name=model_name,
-        model_provider=model_provider,
-        pydantic_model=JimSimonsSignal,
-        agent_name="jim_simons_agent",
-        default_factory=create_default_jim_simons_signal,
+    # Collect all alpha factors and metrics
+    alpha_factors = {}
+    statistical_metrics = {}
+    
+    for analysis_type in ["statistical_analysis", "factor_analysis", "signal_analysis", "anomaly_analysis"]:
+        if analysis_type in ticker_data:
+            analysis = ticker_data[analysis_type]
+            if isinstance(analysis, dict):
+                if "alpha_factors" in analysis:
+                    for k, v in analysis["alpha_factors"].items():
+                        # Convert numpy types to Python native types
+                        if hasattr(v, "item"):
+                            alpha_factors[k] = v.item()
+                        else:
+                            alpha_factors[k] = v
+                            
+                if "metrics" in analysis:
+                    for k, v in analysis["metrics"].items():
+                        # Convert numpy types to Python native types
+                        if hasattr(v, "item"):
+                            statistical_metrics[k] = v.item()
+                        else:
+                            statistical_metrics[k] = v
+    
+    # Extract signal and confidence
+    signal = ticker_data.get("signal", "neutral")
+    confidence = ticker_data.get("confidence", 0.5)
+    
+    # Generate reasoning based on the data
+    reasoning = f"Quantitative analysis indicates a {signal} stance with {confidence:.1f} confidence based on statistical patterns and factor models."
+    
+    # Create output
+    return SimonsOutput(
+        signal=signal,
+        confidence=confidence,
+        reasoning=reasoning,
+        alpha_factors=alpha_factors,
+        statistical_metrics=statistical_metrics,
+        regime_classification=market_regime
     )
 
 

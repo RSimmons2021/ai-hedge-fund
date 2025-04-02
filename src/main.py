@@ -24,11 +24,11 @@ import argparse
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from tabulate import tabulate
-from utils.visualize import save_graph_as_png
 import json
+import os
 
 # Load environment variables from .env file
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
 
 init(autoreset=True)
 
@@ -230,6 +230,7 @@ if __name__ == "__main__":
             for selected_analyst in selected_analysts:
                 file_path += selected_analyst + "_"
             file_path += "graph.png"
+        from utils.visualize import save_graph_as_png
         save_graph_as_png(app, file_path)
 
     # Validate dates if provided
@@ -282,8 +283,6 @@ if __name__ == "__main__":
         start_date=start_date,
         end_date=end_date,
         portfolio=portfolio,
-        show_reasoning=args.show_reasoning,
-        selected_analysts=selected_analysts,
         model_name=model_choice,
         model_provider=model_provider,
     )

@@ -80,6 +80,31 @@ def portfolio_management_agent(state: AgentState):
     if state["metadata"]["show_reasoning"]:
         show_agent_reasoning({ticker: decision.model_dump() for ticker, decision in result.decisions.items()}, "Portfolio Management Agent")
 
+    # Place orders using Alpaca API
+    for ticker, decision in result.decisions.items():
+        if decision.action != "hold":
+            # Determine side and quantity based on decision
+            side = "buy" if decision.action in ["buy", "cover"] else "sell"
+            quantity = decision.quantity
+
+            # Place the order
+            try:
+                from tools.api import place_order
+                order = place_order(
+                    ticker=ticker,
+                    quantity=quantity,
+                    side=side,
+                    type="market",  # Market order
+                    time_in_force="gtc"  # Good 'til canceled
+                )
+
+                if order:
+                    print(f"Order placed for {ticker}: {order}")
+                else:
+                    print(f"Failed to place order for {ticker}")
+            except Exception as e:
+                print(f"Error placing order for {ticker}: {e}")
+
     progress.update_status("portfolio_management_agent", None, "Done")
 
     return {

@@ -11,17 +11,18 @@ This system employs several agents working together:
 5. Phil Fisher Agent - Legendary growth investor who mastered scuttlebutt analysis
 6. Stanley Druckenmiller Agent - Macro legend who hunts for asymmetric opportunities with growth potential
 7. Warren Buffett Agent - The oracle of Omaha, seeks wonderful companies at a fair price
-8. Valuation Agent - Calculates the intrinsic value of a stock and generates trading signals
-9. Sentiment Agent - Analyzes market sentiment and generates trading signals
-10. Fundamentals Agent - Analyzes fundamental data and generates trading signals
-11. Technicals Agent - Analyzes technical indicators and generates trading signals
-12. Risk Manager - Calculates risk metrics and sets position limits
-13. Portfolio Manager - Makes final trading decisions and generates orders
+8. Jim Simons Agent - Quantitative genius who uses statistical models and pattern recognition
+9. Valuation Agent - Calculates the intrinsic value of a stock and generates trading signals
+10. Sentiment Agent - Analyzes market sentiment and generates trading signals
+11. Fundamentals Agent - Analyzes fundamental data and generates trading signals
+12. Technicals Agent - Analyzes technical indicators and generates trading signals
+13. Risk Manager - Calculates risk metrics and sets position limits
+14. Portfolio Manager - Makes final trading decisions and generates orders
     
-<img width="1042" alt="Screenshot 2025-03-22 at 6 19 07 PM" src="https://github.com/user-attachments/assets/cbae3dcf-b571-490d-b0ad-3f0f035ac0d4" />
+<img width="1042" alt="Screenshot 2025-03-22 at 6 19 07 PM" src="https://github.com/user-attachments/assets/cbae3dcf-b571-490d-b0ad-3f0f035ac0d4" />
 
 
-**Note**: the system simulates trading decisions, it does not actually trade.
+**Note**: The system can simulate trading decisions or execute real trades using the Alpaca API.
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/virattt?style=social)](https://twitter.com/virattt)
 
@@ -42,6 +43,7 @@ By using this software, you agree to use it solely for learning purposes.
 - [Usage](#usage)
   - [Running the Hedge Fund](#running-the-hedge-fund)
   - [Running the Backtester](#running-the-backtester)
+  - [Continuous Trading](#continuous-trading)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
 - [Feature Requests](#feature-requests)
@@ -84,6 +86,12 @@ GROQ_API_KEY=your-groq-api-key
 # For getting financial data to power the hedge fund
 # Get your Financial Datasets API key from https://financialdatasets.ai/
 FINANCIAL_DATASETS_API_KEY=your-financial-datasets-api-key
+
+# For real trading functionality with Alpaca
+# Get your Alpaca API keys from https://alpaca.markets/
+APCA_API_KEY_ID=your-alpaca-api-key
+APCA_API_SECRET_KEY=your-alpaca-api-secret
+ALPACA_PAPER_TRADING=True  # Set to False for live trading
 ```
 
 **Important**: You must set `OPENAI_API_KEY`, `GROQ_API_KEY`, `ANTHROPIC_API_KEY`, or `DEEPSEEK_API_KEY` for the hedge fund to work.  If you want to use LLMs from all providers, you will need to set all API keys.
@@ -91,6 +99,8 @@ FINANCIAL_DATASETS_API_KEY=your-financial-datasets-api-key
 Financial data for AAPL, GOOGL, MSFT, NVDA, and TSLA is free and does not require an API key.
 
 For any other ticker, you will need to set the `FINANCIAL_DATASETS_API_KEY` in the .env file.
+
+For real trading functionality, you will need to set the Alpaca API keys (`APCA_API_KEY_ID` and `APCA_API_SECRET_KEY`).
 
 ## Usage
 
@@ -100,7 +110,7 @@ poetry run python src/main.py --ticker AAPL,MSFT,NVDA
 ```
 
 **Example Output:**
-<img width="992" alt="Screenshot 2025-01-06 at 5 50 17 PM" src="https://github.com/user-attachments/assets/e8ca04bf-9989-4a7d-a8b4-34e04666663b" />
+<img width="992" alt="Screenshot 2025-01-06 at 5 50 17 PM" src="https://github.com/user-attachments/assets/e8ca04bf-9989-4a7d-a8b4-34e04666663b" />
 
 You can also specify a `--show-reasoning` flag to print the reasoning of each agent to the console.
 
@@ -120,13 +130,70 @@ poetry run python src/backtester.py --ticker AAPL,MSFT,NVDA
 ```
 
 **Example Output:**
-<img width="941" alt="Screenshot 2025-01-06 at 5 47 52 PM" src="https://github.com/user-attachments/assets/00e794ea-8628-44e6-9a84-8f8a31ad3b47" />
+<img width="941" alt="Screenshot 2025-01-06 at 5 47 52 PM" src="https://github.com/user-attachments/assets/00e794ea-8628-44e6-9a84-8f8a31ad3b47" />
 
 You can optionally specify the start and end dates to backtest over a specific time period.
 
 ```bash
 poetry run python src/backtester.py --ticker AAPL,MSFT,NVDA --start-date 2024-01-01 --end-date 2024-03-01
 ```
+
+### Continuous Trading
+
+The system can continuously monitor and trade in real-time using the Alpaca API. This allows the AI agents to make ongoing trading decisions based on the latest market data.
+
+```bash
+poetry run python src/continuous_trading.py --tickers AAPL,MSFT,NVDA --interval 60
+```
+
+#### Command-line Options:
+
+- `--tickers`: Comma-separated list of tickers to analyze and trade (required)
+- `--interval`: Time between trading iterations in minutes (default: 60)
+- `--runtime`: Maximum runtime in hours (optional, default: run indefinitely)
+- `--analysts`: Comma-separated list of analysts to use (default: jim_simons,warren_buffett,ben_graham)
+- `--api`: API provider to use (choices: alpaca, financial_datasets, alpha_vantage, default: alpaca)
+- `--paper`: Use paper trading (default: True)
+- `--live`: Use live trading (overrides --paper)
+- `--list-analysts`: List all available analysts and exit
+
+#### Examples:
+
+**List all available analysts:**
+```bash
+poetry run python src/continuous_trading.py --list-analysts
+```
+
+**Run with specific analysts:**
+```bash
+poetry run python src/continuous_trading.py --tickers AAPL,MSFT --analysts warren_buffett,charlie_munger,phil_fisher
+```
+
+**Use a different API provider:**
+```bash
+poetry run python src/continuous_trading.py --tickers AAPL,MSFT --api financial_datasets
+```
+
+**Run with 30-minute intervals for 8 hours:**
+```bash
+poetry run python src/continuous_trading.py --tickers AAPL,MSFT,NVDA --interval 30 --runtime 8
+```
+
+**Run in live trading mode (use with caution):**
+```bash
+poetry run python src/continuous_trading.py --tickers AAPL,MSFT --live
+```
+
+#### Key Features of Continuous Trading
+
+1. **Persistent Operation**: Runs continuously until stopped or until the specified runtime is reached
+2. **Error Handling**: Robust error handling to prevent crashes if one component fails
+3. **Real Account Integration**: Uses your Alpaca API keys to interact with your real or paper trading account
+4. **Comprehensive Logging**: Detailed logs for monitoring and debugging
+5. **Flexible Agent Selection**: Choose any combination of the available investment agents
+6. **Multiple API Providers**: Select between different data sources and trading APIs
+
+To stop the trading system at any time, press Ctrl+C in the terminal.
 
 ## Project Structure 
 ```
@@ -135,6 +202,7 @@ ai-hedge-fund/
 │   ├── agents/                   # Agent definitions and workflow
 │   │   ├── bill_ackman.py        # Bill Ackman agent
 │   │   ├── fundamentals.py       # Fundamental analysis agent
+│   │   ├── jim_simons.py         # Jim Simons agent
 │   │   ├── portfolio_manager.py  # Portfolio management agent
 │   │   ├── risk_manager.py       # Risk management agent
 │   │   ├── sentiment.py          # Sentiment analysis agent
@@ -144,7 +212,8 @@ ai-hedge-fund/
 │   ├── tools/                    # Agent tools
 │   │   ├── api.py                # API tools
 │   ├── backtester.py             # Backtesting tools
-│   ├── main.py # Main entry point
+│   ├── continuous_trading.py     # Continuous trading system
+│   ├── main.py                   # Main entry point
 ├── pyproject.toml
 ├── ...
 ```
