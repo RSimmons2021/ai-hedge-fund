@@ -41,6 +41,65 @@ from tools.api import get_account_info, place_order, get_position
 # Import pandas for data manipulation
 import pandas as pd
 
+# Check for required API keys
+def check_api_keys():
+    """Check if all required API keys are present in environment variables."""
+    required_keys = {
+        "ALPHA_VANTAGE_API_KEY": "Alpha Vantage API (for stock price data)",
+        "FINANCIAL_DATASETS_API_KEY": "Financial Datasets API (for financial data)",
+    }
+    
+    # At least one of these LLM API keys is required
+    llm_keys = {
+        "OPENAI_API_KEY": "OpenAI API",
+        "GOOGLE_API_KEY": "Google/Gemini API",
+        "ANTHROPIC_API_KEY": "Anthropic API",
+        "GROQ_API_KEY": "Groq API",
+        "DEEPSEEK_API_KEY": "DeepSeek API"
+    }
+    
+    # Trading API keys (optional for paper trading)
+    trading_keys = {
+        "APCA_API_KEY_ID": "Alpaca API Key ID",
+        "APCA_API_SECRET_KEY": "Alpaca API Secret Key"
+    }
+    
+    missing_keys = []
+    for key, description in required_keys.items():
+        if not os.environ.get(key):
+            missing_keys.append(f"{key} ({description})")
+    
+    # Check if at least one LLM API key is present
+    has_llm_key = False
+    for key in llm_keys:
+        if os.environ.get(key):
+            has_llm_key = True
+            break
+    
+    if not has_llm_key:
+        missing_keys.append(f"At least one of: {', '.join(llm_keys.keys())} (for LLM-based analysis)")
+    
+    # Check trading API keys
+    missing_trading_keys = []
+    for key, description in trading_keys.items():
+        if not os.environ.get(key):
+            missing_trading_keys.append(f"{key} ({description})")
+    
+    # Print warnings
+    if missing_keys:
+        logger.warning("The following required API keys are missing:")
+        for key in missing_keys:
+            logger.warning(f"  - {key}")
+        logger.warning("The application may not function correctly without these keys.")
+    
+    if missing_trading_keys:
+        logger.warning("The following trading API keys are missing:")
+        for key in missing_trading_keys:
+            logger.warning(f"  - {key}")
+        logger.warning("Live trading will be disabled. Only paper trading will be available.")
+    
+    return len(missing_keys) == 0
+
 def get_current_date_range():
     """Get the current date range for analysis (last 30 days to today)."""
     end_date = datetime.now().strftime("%Y-%m-%d")
@@ -51,6 +110,17 @@ def run_analysis(tickers, selected_analysts, model_provider="OpenAI", model_name
     """Run analysis for the specified tickers using the selected analysts."""
     logger.info(f"Running analysis for {len(tickers)} tickers using {len(selected_analysts)} analysts")
     logger.info(f"Using model: {model_name} from provider: {model_provider}")
+    
+    # Convert model_provider string to ModelProvider enum if needed
+    from llm.models import ModelProvider
+    if isinstance(model_provider, str):
+        try:
+            # Try to convert to enum (case-insensitive)
+            model_provider = ModelProvider(model_provider.capitalize())
+        except ValueError:
+            # If conversion fails, default to OpenAI
+            logger.warning(f"Invalid model provider '{model_provider}', defaulting to OpenAI")
+            model_provider = ModelProvider.OPENAI
     
     # Filter out any analysts that are not in ANALYST_CONFIG
     valid_analysts = [a for a in selected_analysts if a in ANALYST_CONFIG]
@@ -239,7 +309,7 @@ def run_analysis(tickers, selected_analysts, model_provider="OpenAI", model_name
     
     return state
 
-def execute_trades(state, api_provider="alpaca", paper_trading=True):
+def execute_trades(state, api_provider="alpaca", paper_trading=True, max_investment_per_ticker=10000.0):
     """Execute trades based on the portfolio manager's recommendations."""
     # Check if we have any portfolio signals
     if "portfolio_manager_agent" not in state["data"]["analyst_signals"]:
@@ -301,6 +371,22 @@ def execute_trades(state, api_provider="alpaca", paper_trading=True):
                 logger.error(f"Error getting positions: {e}")
                 positions = {}
             
+            # Get account information to check available cash
+            try:
+                account = trading_client.get_account()
+                try:
+                    cash = float(getattr(account, "cash", 0.0))
+                    buying_power = float(getattr(account, "buying_power", 0.0))
+                    logger.info(f"Account cash: ${cash:.2f}, Buying power: ${buying_power:.2f}")
+                except Exception as e:
+                    logger.error(f"Error getting account cash: {e}")
+                    cash = 0.0
+                    buying_power = 0.0
+            except Exception as e:
+                logger.error(f"Error getting account information: {e}")
+                cash = 0.0
+                buying_power = 0.0
+            
             # Execute trades for each ticker
             for ticker, signal in portfolio_signals.items():
                 # Skip if quantity is 0
@@ -326,6 +412,44 @@ def execute_trades(state, api_provider="alpaca", paper_trading=True):
                     logger.info(f"Skipping {ticker} with signal {signal_type} and action {action}")
                     continue
                 
+                # Adjust quantity based on buying power if it's a buy order
+                if side == OrderSide.BUY:
+                    try:
+                        # Get current price data to calculate maximum affordable quantity
+                        from alpaca.data.historical import StockHistoricalDataClient
+                        from alpaca.data.requests import StockLatestQuoteRequest
+                        
+                        # Initialize data client
+                        data_client = StockHistoricalDataClient(api_key, api_secret)
+                        
+                        # Get latest quote
+                        request_params = StockLatestQuoteRequest(symbol_or_symbols=ticker)
+                        latest_quote = data_client.get_stock_latest_quote(request_params)
+                        
+                        if ticker in latest_quote:
+                            ask_price = float(latest_quote[ticker].ask_price)
+                            if ask_price > 0:
+                                # Calculate maximum affordable quantity (use 95% of buying power to be safe)
+                                max_by_buying_power = int((buying_power * 0.95) / ask_price)
+                                max_by_investment_limit = int(max_investment_per_ticker / ask_price)
+                                max_quantity = min(max_by_buying_power, max_by_investment_limit)
+                                
+                                logger.info(f"Maximum affordable quantity for {ticker} at ${ask_price:.2f}: {max_quantity} shares")
+                                logger.info(f"  - By buying power: {max_by_buying_power} shares")
+                                logger.info(f"  - By investment limit (${max_investment_per_ticker:.2f}): {max_by_investment_limit} shares")
+                                
+                                # Adjust quantity if needed
+                                if quantity > max_quantity:
+                                    logger.warning(f"Reducing order quantity from {quantity} to {max_quantity} based on available buying power and investment limit")
+                                    quantity = max_quantity
+                    except Exception as e:
+                        logger.error(f"Error calculating maximum quantity: {e}")
+                
+                # Skip if quantity is now 0
+                if quantity <= 0:
+                    logger.info(f"Skipping {ticker} with adjusted quantity {quantity}")
+                    continue
+                
                 # Create market order with shorting enabled
                 try:
                     market_order = MarketOrderRequest(
@@ -347,7 +471,7 @@ def execute_trades(state, api_provider="alpaca", paper_trading=True):
                         try:
                             # Extract available quantity from error message if possible
                             import re
-                            available_match = re.search(r'available:\s*(\d+)', str(e))
+                            available_match = re.search(r'available:\s*"?(\d+)"?', str(e))
                             available_qty = int(available_match.group(1)) if available_match else 0
                             
                             if available_qty > 0 and side == OrderSide.SELL:
@@ -361,6 +485,15 @@ def execute_trades(state, api_provider="alpaca", paper_trading=True):
                                 order = trading_client.submit_order(market_order)
                                 logger.info(f"Submitted adjusted order: {ticker} {side} {available_qty} shares")
                                 logger.info(f"Order ID: {order.id}")
+                            else:
+                                # If no shares are available, check if we need to buy instead
+                                if side == OrderSide.SELL:
+                                    logger.warning(f"No shares available to sell for {ticker}. Consider buying instead.")
+                                    # You could implement a buy order here if your strategy allows it
+                                else:
+                                    # For buy orders with insufficient funds, we could scale down the order
+                                    logger.warning(f"Insufficient funds to buy {quantity} shares of {ticker}.")
+                                    # You could implement a scaled-down buy order here
                         except Exception as retry_error:
                             logger.error(f"Error retrying order for {ticker}: {retry_error}")
         else:
@@ -371,10 +504,10 @@ def execute_trades(state, api_provider="alpaca", paper_trading=True):
         import traceback
         logger.error(traceback.format_exc())
 
-def continuous_trading(tickers, selected_analysts, interval_minutes=60, max_runtime=None, api_provider="alpaca", paper_trading=True, model_name="gpt-4o", model_provider="OpenAI"):
+def continuous_trading(tickers, selected_analysts, interval_minutes=60, max_runtime=None, api_provider="OpenAI", model_name="gpt-4o", paper_trading=True, max_investment_per_ticker=10000.0):
     """Run continuous trading with the specified tickers and analysts."""
     logger.info(f"Starting continuous trading with {len(tickers)} tickers and {len(selected_analysts)} analysts")
-    logger.info(f"Using model: {model_name} from provider: {model_provider}")
+    logger.info(f"Using model: {model_name} from provider: {api_provider}")
     logger.info(f"Trading interval: {interval_minutes} minutes")
     
     if max_runtime:
@@ -395,7 +528,7 @@ def continuous_trading(tickers, selected_analysts, interval_minutes=60, max_runt
         "metadata": {
             "show_reasoning": True,
             "model_name": model_name,
-            "model_provider": model_provider,
+            "model_provider": api_provider,
         }
     }
     
@@ -448,10 +581,10 @@ def continuous_trading(tickers, selected_analysts, interval_minutes=60, max_runt
             logger.info(f"\n=== Trading Iteration {iteration} ===\n")
             
             # Run analysis
-            state = run_analysis(tickers, selected_analysts, model_provider, model_name)
+            state = run_analysis(tickers, selected_analysts, api_provider, model_name)
             
             # Execute trades based on analysis
-            execute_trades(state, api_provider, paper_trading)
+            execute_trades(state, api_provider=api_provider, paper_trading=paper_trading, max_investment_per_ticker=max_investment_per_ticker)
             
             # Print summary
             logger.info("\nTrading Summary:")
@@ -488,10 +621,10 @@ def get_available_analysts():
 def main():
     parser = argparse.ArgumentParser(description="Run continuous trading with specified tickers and analysts")
     parser.add_argument("--tickers", type=str, help="Comma-separated list of tickers to analyze")
-    parser.add_argument("--interval", type=int, default=60, help="Interval in minutes between trading cycles")
+    parser.add_argument("--interval", type=int, default=60, help="Interval between trading cycles in minutes")
     parser.add_argument("--runtime", type=int, help="Maximum runtime in minutes (optional)")
-    parser.add_argument("--paper", action="store_true", help="Use paper trading (default)")
-    parser.add_argument("--live", action="store_true", help="Use live trading (use with caution!)")
+    parser.add_argument("--live", action="store_true", help="Enable live trading (default: paper trading)")
+    parser.add_argument("--max-investment", type=float, default=10000.0, help="Maximum investment amount per ticker (default: $10,000)")
     args = parser.parse_args()
     
     # Configure logging
@@ -502,6 +635,9 @@ def main():
             logging.StreamHandler(),
         ]
     )
+    
+    # Check for required API keys
+    check_api_keys()
     
     # If no tickers provided, prompt for input
     if not args.tickers:
@@ -607,10 +743,10 @@ def main():
             selected_analysts=selected_analysts,
             interval_minutes=args.interval,
             max_runtime=args.runtime,
-            api_provider=model_provider.lower(),
-            paper_trading=paper_trading,
+            api_provider=model_provider,
             model_name=model_name,
-            model_provider=model_provider
+            paper_trading=paper_trading,
+            max_investment_per_ticker=args.max_investment
         )
     except KeyboardInterrupt:
         logger.info("Trading stopped by user")

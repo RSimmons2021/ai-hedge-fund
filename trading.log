@@ -8319,3 +8319,446 @@ Starting trading cycle 78 at 2025-04-02 17:16:28
 TypeError: tuple indices must be integers or slices, not str
 
 2025-04-02 17:16:28,559 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:17:23,286 - continuous_trading - INFO - 
+=== Trading Iteration 102 ===
+
+2025-04-02 17:17:23,286 - continuous_trading - INFO - Running analysis on ['AAPL', 'MSFT', 'NVDA'] from 2025-03-03 to 2025-04-02 using google API
+2025-04-02 17:17:23,286 - continuous_trading - INFO - Using model provider: OpenAI
+2025-04-02 17:17:23,286 - continuous_trading - WARNING - OpenAI API key is missing or empty
+2025-04-02 17:17:23,287 - continuous_trading - WARNING - Skipping Warren Buffett due to missing OpenAI API key
+2025-04-02 17:17:23,287 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:17:23,287 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:17:23,523 - continuous_trading - ERROR - Error running Jim Simons: [Errno 22] Invalid argument
+2025-04-02 17:17:23,523 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:17:23,524 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:17:23,524 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:17:23,547 - continuous_trading - ERROR - Error running risk management: [Errno 22] Invalid argument
+2025-04-02 17:17:23,547 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:17:23,547 - continuous_trading - WARNING - No portfolio manager signals found. Attempting to generate signals...
+2025-04-02 17:17:23,547 - continuous_trading - WARNING - Could not create any portfolio signals. No trades will be executed.
+2025-04-02 17:17:23,547 - continuous_trading - INFO - 
+Trading Summary:
+2025-04-02 17:17:23,549 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:17:28,570 - continuous_trading - INFO - 
+==================================================
+Starting trading cycle 79 at 2025-04-02 17:17:28
+==================================================
+2025-04-02 17:17:28,570 - continuous_trading - INFO - Using model provider: anthropic
+2025-04-02 17:17:28,570 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:17:28,570 - continuous_trading - INFO - Running Warren Buffett agent
+2025-04-02 17:17:28,570 - continuous_trading - ERROR - Error running Warren Buffett: 'end_date'
+2025-04-02 17:17:28,570 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:17:28,570 - continuous_trading - ERROR - Error running Jim Simons: 'end_date'
+2025-04-02 17:17:28,570 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:17:28,570 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:17:28,570 - continuous_trading - ERROR - Error running portfolio_management_agent: 'tickers'
+2025-04-02 17:17:28,570 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:17:28,570 - continuous_trading - ERROR - Error running risk management: 'tickers'
+2025-04-02 17:17:28,570 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:17:28,570 - continuous_trading - ERROR - Error in trading cycle 79: tuple indices must be integers or slices, not str
+2025-04-02 17:17:28,570 - continuous_trading - ERROR - Traceback (most recent call last):
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 387, in continuous_trading
+    # Initialize state
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 283, in execute_trades
+    api_key = os.environ.get("APCA_API_KEY_ID")
+TypeError: tuple indices must be integers or slices, not str
+
+2025-04-02 17:17:28,570 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:18:23,556 - continuous_trading - INFO - 
+=== Trading Iteration 103 ===
+
+2025-04-02 17:18:23,557 - continuous_trading - INFO - Running analysis on ['AAPL', 'MSFT', 'NVDA'] from 2025-03-03 to 2025-04-02 using google API
+2025-04-02 17:18:23,557 - continuous_trading - INFO - Using model provider: OpenAI
+2025-04-02 17:18:23,557 - continuous_trading - WARNING - OpenAI API key is missing or empty
+2025-04-02 17:18:23,557 - continuous_trading - WARNING - Skipping Warren Buffett due to missing OpenAI API key
+2025-04-02 17:18:23,558 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:18:23,558 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:18:23,785 - continuous_trading - ERROR - Error running Jim Simons: [Errno 22] Invalid argument
+2025-04-02 17:18:23,786 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:18:23,786 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:18:23,786 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:18:23,808 - continuous_trading - ERROR - Error running risk management: [Errno 22] Invalid argument
+2025-04-02 17:18:23,808 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:18:23,808 - continuous_trading - WARNING - No portfolio manager signals found. Attempting to generate signals...
+2025-04-02 17:18:23,808 - continuous_trading - WARNING - Could not create any portfolio signals. No trades will be executed.
+2025-04-02 17:18:23,808 - continuous_trading - INFO - 
+Trading Summary:
+2025-04-02 17:18:23,808 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:18:28,578 - continuous_trading - INFO - 
+==================================================
+Starting trading cycle 80 at 2025-04-02 17:18:28
+==================================================
+2025-04-02 17:18:28,579 - continuous_trading - INFO - Using model provider: anthropic
+2025-04-02 17:18:28,579 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:18:28,579 - continuous_trading - INFO - Running Warren Buffett agent
+2025-04-02 17:18:28,579 - continuous_trading - ERROR - Error running Warren Buffett: 'end_date'
+2025-04-02 17:18:28,579 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:18:28,579 - continuous_trading - ERROR - Error running Jim Simons: 'end_date'
+2025-04-02 17:18:28,580 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:18:28,580 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:18:28,580 - continuous_trading - ERROR - Error running portfolio_management_agent: 'tickers'
+2025-04-02 17:18:28,580 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:18:28,580 - continuous_trading - ERROR - Error running risk management: 'tickers'
+2025-04-02 17:18:28,581 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:18:28,581 - continuous_trading - ERROR - Error in trading cycle 80: tuple indices must be integers or slices, not str
+2025-04-02 17:18:28,594 - continuous_trading - ERROR - Traceback (most recent call last):
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 387, in continuous_trading
+    logger.warning(f"Insufficient funds to buy {quantity} shares of {ticker}.")
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 283, in execute_trades
+    api_key = os.environ.get("APCA_API_KEY_ID")
+TypeError: tuple indices must be integers or slices, not str
+
+2025-04-02 17:18:28,598 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:19:23,824 - continuous_trading - INFO - 
+=== Trading Iteration 104 ===
+
+2025-04-02 17:19:23,824 - continuous_trading - INFO - Running analysis on ['AAPL', 'MSFT', 'NVDA'] from 2025-03-03 to 2025-04-02 using google API
+2025-04-02 17:19:23,824 - continuous_trading - INFO - Using model provider: OpenAI
+2025-04-02 17:19:23,824 - continuous_trading - WARNING - OpenAI API key is missing or empty
+2025-04-02 17:19:23,824 - continuous_trading - WARNING - Skipping Warren Buffett due to missing OpenAI API key
+2025-04-02 17:19:23,824 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:19:23,824 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:19:24,212 - continuous_trading - ERROR - Error running Jim Simons: [Errno 22] Invalid argument
+2025-04-02 17:19:24,213 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:19:24,213 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:19:24,214 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:19:24,235 - continuous_trading - ERROR - Error running risk management: [Errno 22] Invalid argument
+2025-04-02 17:19:24,235 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:19:24,235 - continuous_trading - WARNING - No portfolio manager signals found. Attempting to generate signals...
+2025-04-02 17:19:24,235 - continuous_trading - WARNING - Could not create any portfolio signals. No trades will be executed.
+2025-04-02 17:19:24,235 - continuous_trading - INFO - 
+Trading Summary:
+2025-04-02 17:19:24,235 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:19:28,600 - continuous_trading - INFO - 
+==================================================
+Starting trading cycle 81 at 2025-04-02 17:19:28
+==================================================
+2025-04-02 17:19:28,600 - continuous_trading - INFO - Using model provider: anthropic
+2025-04-02 17:19:28,600 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:19:28,600 - continuous_trading - INFO - Running Warren Buffett agent
+2025-04-02 17:19:28,600 - continuous_trading - ERROR - Error running Warren Buffett: 'end_date'
+2025-04-02 17:19:28,600 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:19:28,600 - continuous_trading - ERROR - Error running Jim Simons: 'end_date'
+2025-04-02 17:19:28,600 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:19:28,602 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:19:28,602 - continuous_trading - ERROR - Error running portfolio_management_agent: 'tickers'
+2025-04-02 17:19:28,602 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:19:28,602 - continuous_trading - ERROR - Error running risk management: 'tickers'
+2025-04-02 17:19:28,602 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:19:28,603 - continuous_trading - ERROR - Error in trading cycle 81: tuple indices must be integers or slices, not str
+2025-04-02 17:19:28,608 - continuous_trading - ERROR - Traceback (most recent call last):
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 387, in continuous_trading
+    # Determine order side
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 283, in execute_trades
+    logger.info("Running portfolio management analysis")
+TypeError: tuple indices must be integers or slices, not str
+
+2025-04-02 17:19:28,608 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:20:24,248 - continuous_trading - INFO - 
+=== Trading Iteration 105 ===
+
+2025-04-02 17:20:24,248 - continuous_trading - INFO - Running analysis on ['AAPL', 'MSFT', 'NVDA'] from 2025-03-03 to 2025-04-02 using google API
+2025-04-02 17:20:24,248 - continuous_trading - INFO - Using model provider: OpenAI
+2025-04-02 17:20:24,248 - continuous_trading - WARNING - OpenAI API key is missing or empty
+2025-04-02 17:20:24,248 - continuous_trading - WARNING - Skipping Warren Buffett due to missing OpenAI API key
+2025-04-02 17:20:24,248 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:20:24,248 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:20:24,545 - continuous_trading - ERROR - Error running Jim Simons: [Errno 22] Invalid argument
+2025-04-02 17:20:24,545 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:20:24,545 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:20:24,548 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:20:24,561 - continuous_trading - ERROR - Error running risk management: [Errno 22] Invalid argument
+2025-04-02 17:20:24,564 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:20:24,564 - continuous_trading - WARNING - No portfolio manager signals found. Attempting to generate signals...
+2025-04-02 17:20:24,564 - continuous_trading - WARNING - Could not create any portfolio signals. No trades will be executed.
+2025-04-02 17:20:24,564 - continuous_trading - INFO - 
+Trading Summary:
+2025-04-02 17:20:24,564 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:20:28,621 - continuous_trading - INFO - 
+==================================================
+Starting trading cycle 82 at 2025-04-02 17:20:28
+==================================================
+2025-04-02 17:20:28,621 - continuous_trading - INFO - Using model provider: anthropic
+2025-04-02 17:20:28,621 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:20:28,621 - continuous_trading - INFO - Running Warren Buffett agent
+2025-04-02 17:20:28,621 - continuous_trading - ERROR - Error running Warren Buffett: 'end_date'
+2025-04-02 17:20:28,621 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:20:28,621 - continuous_trading - ERROR - Error running Jim Simons: 'end_date'
+2025-04-02 17:20:28,621 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:20:28,621 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:20:28,621 - continuous_trading - ERROR - Error running portfolio_management_agent: 'tickers'
+2025-04-02 17:20:28,621 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:20:28,621 - continuous_trading - ERROR - Error running risk management: 'tickers'
+2025-04-02 17:20:28,621 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:20:28,621 - continuous_trading - ERROR - Error in trading cycle 82: tuple indices must be integers or slices, not str
+2025-04-02 17:20:28,626 - continuous_trading - ERROR - Traceback (most recent call last):
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 387, in continuous_trading
+    # Determine order side
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 283, in execute_trades
+    logger.info("Running portfolio management analysis")
+TypeError: tuple indices must be integers or slices, not str
+
+2025-04-02 17:20:28,634 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:21:24,577 - continuous_trading - INFO - 
+=== Trading Iteration 106 ===
+
+2025-04-02 17:21:24,577 - continuous_trading - INFO - Running analysis on ['AAPL', 'MSFT', 'NVDA'] from 2025-03-03 to 2025-04-02 using google API
+2025-04-02 17:21:24,577 - continuous_trading - INFO - Using model provider: OpenAI
+2025-04-02 17:21:24,577 - continuous_trading - WARNING - OpenAI API key is missing or empty
+2025-04-02 17:21:24,577 - continuous_trading - WARNING - Skipping Warren Buffett due to missing OpenAI API key
+2025-04-02 17:21:24,577 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:21:24,577 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:21:24,752 - continuous_trading - ERROR - Error running Jim Simons: [Errno 22] Invalid argument
+2025-04-02 17:21:24,752 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:21:24,752 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:21:24,752 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:21:24,770 - continuous_trading - ERROR - Error running risk management: [Errno 22] Invalid argument
+2025-04-02 17:21:24,770 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:21:24,770 - continuous_trading - WARNING - No portfolio manager signals found. Attempting to generate signals...
+2025-04-02 17:21:24,770 - continuous_trading - WARNING - Could not create any portfolio signals. No trades will be executed.
+2025-04-02 17:21:24,770 - continuous_trading - INFO - 
+Trading Summary:
+2025-04-02 17:21:24,770 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:21:28,640 - continuous_trading - INFO - 
+==================================================
+Starting trading cycle 83 at 2025-04-02 17:21:28
+==================================================
+2025-04-02 17:21:28,640 - continuous_trading - INFO - Using model provider: anthropic
+2025-04-02 17:21:28,640 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:21:28,640 - continuous_trading - INFO - Running Warren Buffett agent
+2025-04-02 17:21:28,640 - continuous_trading - ERROR - Error running Warren Buffett: 'end_date'
+2025-04-02 17:21:28,640 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:21:28,640 - continuous_trading - ERROR - Error running Jim Simons: 'end_date'
+2025-04-02 17:21:28,640 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:21:28,640 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:21:28,640 - continuous_trading - ERROR - Error running portfolio_management_agent: 'tickers'
+2025-04-02 17:21:28,640 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:21:28,642 - continuous_trading - ERROR - Error running risk management: 'tickers'
+2025-04-02 17:21:28,642 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:21:28,642 - continuous_trading - ERROR - Error in trading cycle 83: tuple indices must be integers or slices, not str
+2025-04-02 17:21:28,642 - continuous_trading - ERROR - Traceback (most recent call last):
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 387, in continuous_trading
+    # Determine order side
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 283, in execute_trades
+    logger.info("Running portfolio management analysis")
+TypeError: tuple indices must be integers or slices, not str
+
+2025-04-02 17:21:28,642 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:22:24,783 - continuous_trading - INFO - 
+=== Trading Iteration 107 ===
+
+2025-04-02 17:22:24,784 - continuous_trading - INFO - Running analysis on ['AAPL', 'MSFT', 'NVDA'] from 2025-03-03 to 2025-04-02 using google API
+2025-04-02 17:22:24,784 - continuous_trading - INFO - Using model provider: OpenAI
+2025-04-02 17:22:24,784 - continuous_trading - WARNING - OpenAI API key is missing or empty
+2025-04-02 17:22:24,784 - continuous_trading - WARNING - Skipping Warren Buffett due to missing OpenAI API key
+2025-04-02 17:22:24,784 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:22:24,785 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:22:25,046 - continuous_trading - ERROR - Error running Jim Simons: [Errno 22] Invalid argument
+2025-04-02 17:22:25,046 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:22:25,047 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:22:25,048 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:22:25,061 - continuous_trading - ERROR - Error running risk management: [Errno 22] Invalid argument
+2025-04-02 17:22:25,061 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:22:25,061 - continuous_trading - WARNING - No portfolio manager signals found. Attempting to generate signals...
+2025-04-02 17:22:25,062 - continuous_trading - WARNING - Could not create any portfolio signals. No trades will be executed.
+2025-04-02 17:22:25,062 - continuous_trading - INFO - 
+Trading Summary:
+2025-04-02 17:22:25,062 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:22:28,658 - continuous_trading - INFO - 
+==================================================
+Starting trading cycle 84 at 2025-04-02 17:22:28
+==================================================
+2025-04-02 17:22:28,659 - continuous_trading - INFO - Using model provider: anthropic
+2025-04-02 17:22:28,660 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:22:28,660 - continuous_trading - INFO - Running Warren Buffett agent
+2025-04-02 17:22:28,660 - continuous_trading - ERROR - Error running Warren Buffett: 'end_date'
+2025-04-02 17:22:28,660 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:22:28,660 - continuous_trading - ERROR - Error running Jim Simons: 'end_date'
+2025-04-02 17:22:28,660 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:22:28,660 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:22:28,660 - continuous_trading - ERROR - Error running portfolio_management_agent: 'tickers'
+2025-04-02 17:22:28,660 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:22:28,660 - continuous_trading - ERROR - Error running risk management: 'tickers'
+2025-04-02 17:22:28,660 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:22:28,660 - continuous_trading - ERROR - Error in trading cycle 84: tuple indices must be integers or slices, not str
+2025-04-02 17:22:28,665 - continuous_trading - ERROR - Traceback (most recent call last):
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 387, in continuous_trading
+    # Determine order side
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 283, in execute_trades
+    logger.info("Running portfolio management analysis")
+TypeError: tuple indices must be integers or slices, not str
+
+2025-04-02 17:22:28,665 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:23:25,063 - continuous_trading - INFO - 
+=== Trading Iteration 108 ===
+
+2025-04-02 17:23:25,063 - continuous_trading - INFO - Running analysis on ['AAPL', 'MSFT', 'NVDA'] from 2025-03-03 to 2025-04-02 using google API
+2025-04-02 17:23:25,063 - continuous_trading - INFO - Using model provider: OpenAI
+2025-04-02 17:23:25,065 - continuous_trading - WARNING - OpenAI API key is missing or empty
+2025-04-02 17:23:25,065 - continuous_trading - WARNING - Skipping Warren Buffett due to missing OpenAI API key
+2025-04-02 17:23:25,065 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:23:25,065 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:23:25,208 - continuous_trading - ERROR - Error running Jim Simons: [Errno 22] Invalid argument
+2025-04-02 17:23:25,210 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:23:25,210 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:23:25,210 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:23:25,238 - continuous_trading - ERROR - Error running risk management: [Errno 22] Invalid argument
+2025-04-02 17:23:25,238 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:23:25,238 - continuous_trading - WARNING - No portfolio manager signals found. Attempting to generate signals...
+2025-04-02 17:23:25,239 - continuous_trading - WARNING - Could not create any portfolio signals. No trades will be executed.
+2025-04-02 17:23:25,239 - continuous_trading - INFO - 
+Trading Summary:
+2025-04-02 17:23:25,239 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:23:28,673 - continuous_trading - INFO - 
+==================================================
+Starting trading cycle 85 at 2025-04-02 17:23:28
+==================================================
+2025-04-02 17:23:28,674 - continuous_trading - INFO - Using model provider: anthropic
+2025-04-02 17:23:28,674 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:23:28,674 - continuous_trading - INFO - Running Warren Buffett agent
+2025-04-02 17:23:28,674 - continuous_trading - ERROR - Error running Warren Buffett: 'end_date'
+2025-04-02 17:23:28,675 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:23:28,675 - continuous_trading - ERROR - Error running Jim Simons: 'end_date'
+2025-04-02 17:23:28,676 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:23:28,676 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:23:28,676 - continuous_trading - ERROR - Error running portfolio_management_agent: 'tickers'
+2025-04-02 17:23:28,676 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:23:28,677 - continuous_trading - ERROR - Error running risk management: 'tickers'
+2025-04-02 17:23:28,677 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:23:28,677 - continuous_trading - ERROR - Error in trading cycle 85: tuple indices must be integers or slices, not str
+2025-04-02 17:23:28,685 - continuous_trading - ERROR - Traceback (most recent call last):
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 387, in continuous_trading
+    cash = 0.0
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 283, in execute_trades
+    else:
+TypeError: tuple indices must be integers or slices, not str
+
+2025-04-02 17:23:28,687 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:24:25,247 - continuous_trading - INFO - 
+=== Trading Iteration 109 ===
+
+2025-04-02 17:24:25,248 - continuous_trading - INFO - Running analysis on ['AAPL', 'MSFT', 'NVDA'] from 2025-03-03 to 2025-04-02 using google API
+2025-04-02 17:24:25,248 - continuous_trading - INFO - Using model provider: OpenAI
+2025-04-02 17:24:25,248 - continuous_trading - WARNING - OpenAI API key is missing or empty
+2025-04-02 17:24:25,248 - continuous_trading - WARNING - Skipping Warren Buffett due to missing OpenAI API key
+2025-04-02 17:24:25,248 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:24:25,248 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:24:25,620 - continuous_trading - ERROR - Error running Jim Simons: [Errno 22] Invalid argument
+2025-04-02 17:24:25,627 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:24:25,627 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:24:25,627 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:24:25,648 - continuous_trading - ERROR - Error running risk management: [Errno 22] Invalid argument
+2025-04-02 17:24:25,648 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:24:25,648 - continuous_trading - WARNING - No portfolio manager signals found. Attempting to generate signals...
+2025-04-02 17:24:25,648 - continuous_trading - WARNING - Could not create any portfolio signals. No trades will be executed.
+2025-04-02 17:24:25,648 - continuous_trading - INFO - 
+Trading Summary:
+2025-04-02 17:24:25,648 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:24:28,690 - continuous_trading - INFO - 
+==================================================
+Starting trading cycle 86 at 2025-04-02 17:24:28
+==================================================
+2025-04-02 17:24:28,690 - continuous_trading - INFO - Using model provider: anthropic
+2025-04-02 17:24:28,690 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:24:28,692 - continuous_trading - INFO - Running Warren Buffett agent
+2025-04-02 17:24:28,692 - continuous_trading - ERROR - Error running Warren Buffett: 'end_date'
+2025-04-02 17:24:28,692 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:24:28,692 - continuous_trading - ERROR - Error running Jim Simons: 'end_date'
+2025-04-02 17:24:28,692 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:24:28,692 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:24:28,692 - continuous_trading - ERROR - Error running portfolio_management_agent: 'tickers'
+2025-04-02 17:24:28,692 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:24:28,692 - continuous_trading - ERROR - Error running risk management: 'tickers'
+2025-04-02 17:24:28,692 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:24:28,698 - continuous_trading - ERROR - Error in trading cycle 86: tuple indices must be integers or slices, not str
+2025-04-02 17:24:28,708 - continuous_trading - ERROR - Traceback (most recent call last):
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 387, in continuous_trading
+    cash = 0.0
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 283, in execute_trades
+    else:
+TypeError: tuple indices must be integers or slices, not str
+
+2025-04-02 17:24:28,708 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:25:15,408 - continuous_trading - INFO - 
+=== Trading Iteration 23 ===
+
+2025-04-02 17:25:15,464 - continuous_trading - INFO - Running analysis on ['AAPL', 'MSFT', 'NVDA'] from 2025-03-03 to 2025-04-02 using alpaca API
+2025-04-02 17:25:15,834 - continuous_trading - INFO - Account cash balance: $98377.15
+2025-04-02 17:25:15,952 - continuous_trading - INFO - Current position in AAPL: 3 shares at $223.29
+2025-04-02 17:25:15,985 - continuous_trading - INFO - Current position in MSFT: 3 shares at $381.31
+2025-04-02 17:25:16,034 - continuous_trading - INFO - Current position in NVDA: 3 shares at $109.083333
+2025-04-02 17:25:16,035 - continuous_trading - WARNING - Skipping Warren Buffett due to missing OpenAI API key
+2025-04-02 17:25:16,035 - continuous_trading - WARNING - Skipping Ben Graham due to missing OpenAI API key
+2025-04-02 17:25:16,035 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:25:16,225 - continuous_trading - ERROR - Error running Jim Simons: [Errno 22] Invalid argument
+2025-04-02 17:25:16,227 - continuous_trading - WARNING - Skipping portfolio management due to missing OpenAI API key
+2025-04-02 17:25:16,593 - continuous_trading - ERROR - Error running risk management: [Errno 22] Invalid argument
+2025-04-02 17:25:16,596 - continuous_trading - WARNING - No portfolio manager signals found. Skipping trade execution.
+2025-04-02 17:25:16,596 - continuous_trading - INFO - 
+Trading Summary:
+2025-04-02 17:25:16,596 - continuous_trading - INFO - Waiting 10 minutes until next analysis...
+2025-04-02 17:25:25,648 - continuous_trading - INFO - 
+=== Trading Iteration 110 ===
+
+2025-04-02 17:25:25,649 - continuous_trading - INFO - Running analysis on ['AAPL', 'MSFT', 'NVDA'] from 2025-03-03 to 2025-04-02 using google API
+2025-04-02 17:25:25,649 - continuous_trading - INFO - Using model provider: OpenAI
+2025-04-02 17:25:25,649 - continuous_trading - WARNING - OpenAI API key is missing or empty
+2025-04-02 17:25:25,649 - continuous_trading - WARNING - Skipping Warren Buffett due to missing OpenAI API key
+2025-04-02 17:25:25,649 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:25:25,649 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:25:25,945 - continuous_trading - ERROR - Error running Jim Simons: [Errno 22] Invalid argument
+2025-04-02 17:25:25,948 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:25:25,948 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:25:25,948 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:25:25,961 - continuous_trading - ERROR - Error running risk management: [Errno 22] Invalid argument
+2025-04-02 17:25:25,961 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:25:25,961 - continuous_trading - WARNING - No portfolio manager signals found. Attempting to generate signals...
+2025-04-02 17:25:25,961 - continuous_trading - WARNING - Could not create any portfolio signals. No trades will be executed.
+2025-04-02 17:25:25,965 - continuous_trading - INFO - 
+Trading Summary:
+2025-04-02 17:25:25,965 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:25:28,709 - continuous_trading - INFO - 
+==================================================
+Starting trading cycle 87 at 2025-04-02 17:25:28
+==================================================
+2025-04-02 17:25:28,709 - continuous_trading - INFO - Using model provider: anthropic
+2025-04-02 17:25:28,709 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:25:28,709 - continuous_trading - INFO - Running Warren Buffett agent
+2025-04-02 17:25:28,709 - continuous_trading - ERROR - Error running Warren Buffett: 'end_date'
+2025-04-02 17:25:28,709 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:25:28,709 - continuous_trading - ERROR - Error running Jim Simons: 'end_date'
+2025-04-02 17:25:28,709 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:25:28,709 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:25:28,709 - continuous_trading - ERROR - Error running portfolio_management_agent: 'tickers'
+2025-04-02 17:25:28,709 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:25:28,709 - continuous_trading - ERROR - Error running risk management: 'tickers'
+2025-04-02 17:25:28,709 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:25:28,709 - continuous_trading - ERROR - Error in trading cycle 87: tuple indices must be integers or slices, not str
+2025-04-02 17:25:28,709 - continuous_trading - ERROR - Traceback (most recent call last):
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 387, in continuous_trading
+    cash = 0.0
+  File "C:\Users\fowl_\Documents\GitHub\ai-hedge-fund\src\continuous_trading.py", line 283, in execute_trades
+    else:
+TypeError: tuple indices must be integers or slices, not str
+
+2025-04-02 17:25:28,709 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
+2025-04-02 17:26:25,970 - continuous_trading - INFO - 
+=== Trading Iteration 111 ===
+
+2025-04-02 17:26:25,970 - continuous_trading - INFO - Running analysis on ['AAPL', 'MSFT', 'NVDA'] from 2025-03-03 to 2025-04-02 using google API
+2025-04-02 17:26:25,970 - continuous_trading - INFO - Using model provider: OpenAI
+2025-04-02 17:26:25,970 - continuous_trading - WARNING - OpenAI API key is missing or empty
+2025-04-02 17:26:25,970 - continuous_trading - WARNING - Skipping Warren Buffett due to missing OpenAI API key
+2025-04-02 17:26:25,970 - continuous_trading - WARNING - Unknown analyst: risk_management. Skipping.
+2025-04-02 17:26:25,970 - continuous_trading - INFO - Running Jim Simons agent
+2025-04-02 17:26:26,212 - continuous_trading - ERROR - Error running Jim Simons: [Errno 22] Invalid argument
+2025-04-02 17:26:26,212 - continuous_trading - INFO - Available analyst signals:
+2025-04-02 17:26:26,213 - continuous_trading - INFO - Running portfolio manager...
+2025-04-02 17:26:26,213 - continuous_trading - INFO - Creating manual portfolio signals based on available analyst signals
+2025-04-02 17:26:26,242 - continuous_trading - ERROR - Error running risk management: [Errno 22] Invalid argument
+2025-04-02 17:26:26,242 - continuous_trading - INFO - Before execute_trades - Available analyst signals:
+2025-04-02 17:26:26,243 - continuous_trading - WARNING - No portfolio manager signals found. Attempting to generate signals...
+2025-04-02 17:26:26,243 - continuous_trading - WARNING - Could not create any portfolio signals. No trades will be executed.
+2025-04-02 17:26:26,243 - continuous_trading - INFO - 
+Trading Summary:
+2025-04-02 17:26:26,243 - continuous_trading - INFO - Waiting 1 minutes until next analysis...
