@@ -34,8 +34,10 @@ from alpaca_trade_api.rest import REST, TimeFrame
 from alpaca.trading.client import TradingClient
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest
+from alpaca.trading.requests import GetOrdersRequest
 from alpaca.data.timeframe import TimeFrame as AlpacaTimeFrame
 from datetime import datetime
+from pydantic import ValidationError
 
 # Alpaca API configuration
 APCA_API_KEY_ID = os.environ.get("APCA_API_KEY_ID")
@@ -405,21 +407,26 @@ def get_position(ticker: str):
     # Try the new client first
     if trading_client is not None:
         try:
-            # The new client uses get_all_positions() and then we filter by symbol
-            positions = trading_client.get_all_positions()
-            for position in positions:
-                if position.symbol == ticker:
-                    return position
-            # If we get here, the position doesn't exist
-            raise Exception("position does not exist")
+            # Use the new client to get position
+            position = trading_client.get_open_position(ticker)
+            return position
+        except ValidationError as ve:
+            # Handle cases where the returned data doesn't match the Pydantic model
+            print(f"Warning: Pydantic validation error getting position for {ticker}: {ve}. Check alpaca-py version compatibility.")
+            return None
         except Exception as e:
+            # Check if it's a 'position not found' error
+            if "position not found" in str(e).lower():
+                return None  # Return None if no position exists
             print(f"Error getting position information from new client: {e}")
-    
+            return None
+
     # Fall back to legacy client
     if api is None:
         print("Alpaca API is not initialized")
         return None
     try:
+        # Use the legacy client to get position
         position = api.get_position(ticker)
         return position
     except Exception as e:
@@ -442,6 +449,22 @@ def place_order(ticker: str, quantity: int, side: str, type: str, time_in_force:
             elif time_in_force.lower() == 'ioc':
                 order_tif = TimeInForce.IOC
             
+            # Cancel ALL existing open orders for this symbol before placing a new one
+            try:
+                cancel_request = GetOrdersRequest(symbol=ticker, status='open')
+                open_orders = trading_client.get_orders(filter=cancel_request)
+                cancelled_ids = []
+                for order in open_orders:
+                    try:
+                        trading_client.cancel_order_by_id(order.id)
+                        cancelled_ids.append(order.id)
+                    except Exception as cancel_err:
+                        print(f"Warning: Failed to cancel order {order.id} for {ticker}: {cancel_err}")
+                if cancelled_ids:
+                    print(f"Cancelled open orders for {ticker}: {cancelled_ids}")
+            except Exception as e:
+                print(f"Error checking/cancelling existing orders for {ticker}: {e}")
+
             # Create the appropriate order request based on order type
             if type.lower() == 'market':
                 order_request = MarketOrderRequest(

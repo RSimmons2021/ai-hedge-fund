@@ -199,52 +199,27 @@ def run_analysis(tickers, selected_analysts, model_provider="OpenAI", model_name
             if position:
                 # Handle both dictionary-like and object-like access
                 try:
-                    shares = float(position.get("qty", 0))
-                except AttributeError:
-                    # Try object attribute access
-                    shares = float(getattr(position, "qty", 0))
-                    
-                try:
-                    avg_price = float(position.get("avg_entry_price", 0.0))
-                except AttributeError:
-                    # Try object attribute access
-                    avg_price = float(getattr(position, "avg_entry_price", 0.0))
-                    
-                try:
-                    current_price = float(position.get("current_price", 0.0))
-                except AttributeError:
-                    # Try object attribute access
-                    current_price = float(getattr(position, "current_price", 0.0))
-                    
-                try:
-                    market_value = float(position.get("market_value", 0.0))
-                except AttributeError:
-                    # Try object attribute access
+                    qty = float(getattr(position, "qty", 0.0))
+                    avg_entry_price = float(getattr(position, "avg_entry_price", 0.0))
+                    side = getattr(position, "side", "").lower()
+                    qty_held_for_orders = float(getattr(position, "qty_held_for_orders", 0.0))
                     market_value = float(getattr(position, "market_value", 0.0))
                     
-                try:
-                    unrealized_pl = float(position.get("unrealized_pl", 0.0))
-                except AttributeError:
-                    # Try object attribute access
-                    unrealized_pl = float(getattr(position, "unrealized_pl", 0.0))
+                    state["data"]["portfolio"]["positions"][ticker] = {
+                        "qty": qty,
+                        "avg_entry_price": avg_entry_price,
+                        "side": side,
+                        "qty_held_for_orders": qty_held_for_orders,
+                        "market_value": market_value,
+                    }
+                    logger.info(f"Position for {ticker}: {qty} shares @ ${avg_entry_price:.2f}")
+                except AttributeError as ae:
+                    logger.error(f"Attribute error getting position info for {ticker}: {ae}. Attributes: {dir(position)}")
+                except Exception as pos_err:
+                    logger.error(f"Error processing position info for {ticker}: {pos_err}")
                     
-                state["data"]["portfolio"]["positions"][ticker] = {
-                    "shares": shares,
-                    "avg_price": avg_price,
-                    "current_price": current_price,
-                    "market_value": market_value,
-                    "unrealized_pl": unrealized_pl
-                }
         except Exception as e:
-            logger.error(f"Error getting position for {ticker}: {e}")
-            # Initialize with empty position
-            state["data"]["portfolio"]["positions"][ticker] = {
-                "shares": 0,
-                "avg_price": 0.0,
-                "current_price": 0.0,
-                "market_value": 0.0,
-                "unrealized_pl": 0.0
-            }
+            logger.error(f"Error getting position information for {ticker}: {e}")
     
     # Run analysis for each analyst
     for analyst_key in valid_analysts:
