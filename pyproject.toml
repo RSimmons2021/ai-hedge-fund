@@ -30,6 +30,7 @@ statsmodels = "<0.14.0"
 alpaca-trade-api = "^3.2.0"
 alpaca-py = "^0.39.1"
 pywavelets = "^1.8.0"
+krakenex = "^2.1.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"

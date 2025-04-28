@@ -1424,6 +1424,20 @@ files = [
 ]
 
 [[package]]
+name = "krakenex"
+version = "2.2.2"
+description = "kraken.com cryptocurrency exchange API"
+optional = false
+python-versions = ">=3.3"
+groups = ["main"]
+files = [
+    {file = "krakenex-2.2.2.tar.gz", hash = "sha256:3f7553c3295ce03c79a47701f3949066a64ab5d8656f9e97d13cf6bf22eacf7a"},
+]
+
+[package.dependencies]
+requests = ">=2.18.2,<3"
+
+[[package]]
 name = "langchain"
 version = "0.3.0"
 description = "Building applications with LLMs through composability"
@@ -3837,4 +3851,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0"
-content-hash = "23c3c8d59913667bf4fbbc33392ec9dc8bde34a1e0cb41191a793ad372bea41c"
+content-hash = "0597544ac98b3ca46feee6303046beee683619b5bc5d0d8979b3a4faf58c8aef"

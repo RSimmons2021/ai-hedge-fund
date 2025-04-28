@@ -44,6 +44,7 @@ By using this software, you agree to use it solely for learning purposes.
   - [Running the Hedge Fund](#running-the-hedge-fund)
   - [Running the Backtester](#running-the-backtester)
   - [Continuous Trading](#continuous-trading)
+  - [Crypto Trading](#crypto-trading)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
 - [Feature Requests](#feature-requests)
@@ -194,6 +195,41 @@ poetry run python src/continuous_trading.py --tickers AAPL,MSFT --live
 6. **Multiple API Providers**: Select between different data sources and trading APIs
 
 To stop the trading system at any time, press Ctrl+C in the terminal.
+
+### Crypto Trading
+
+The system supports cryptocurrency trading through both Alpaca (paper trading) and Kraken (live trading) APIs.
+
+#### Alpaca Crypto Paper Trading
+
+To use Alpaca for paper trading cryptocurrencies:
+
+1. Ensure your `.env` file has the following configuration:
+   ```
+   APCA_API_KEY_ID=your_alpaca_api_key_here
+   APCA_API_SECRET_KEY=your_alpaca_secret_key_here
+   ALPACA_PAPER_TRADING=True
+   ```
+
+2. Run the continuous trading script with crypto pairs:
+   ```bash
+   poetry run python src/continuous_trading.py --tickers "BTC/USD,ETH/USD,SOL/USD" --interval 1
+   ```
+
+#### Kraken Live Trading
+
+For live trading with Kraken:
+
+1. Set `ALPACA_PAPER_TRADING=False` in your `.env` file
+2. Ensure your Kraken API keys are configured:
+   ```
+   KRAKEN_API_KEY=your_kraken_api_key_here
+   KRAKEN_SECRET_KEY=your_kraken_secret_key_here
+   ```
+
+3. Run the continuous trading script with the same command as above
+
+**Note**: Kraken does not support paper trading, so for testing purposes it's recommended to use Alpaca's paper trading feature.
 
 ## Project Structure 
 ```
